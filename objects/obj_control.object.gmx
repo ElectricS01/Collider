@@ -32,11 +32,11 @@ global.settings = false
 rand = 0
 debug = false
 randomize()
-game_ended = false
+ended = false
+global.game_ended = false
 game_paused = false
 
-var21 = 0
-var22 = 0
+ball_count = 4
 
 debug = false
 </string>
@@ -61,7 +61,8 @@ debug = false
         <arguments>
           <argument>
             <kind>1</kind>
-            <string>if (os_browser != browser_not_a_browser) {
+            <string>show_debug_message("hi")
+if (os_browser != browser_not_a_browser) {
     if (browser_width &gt;= 600) &amp;&amp; (browser_height &gt;= 600) {
         width = 600
         height = 600
@@ -77,7 +78,7 @@ debug = false
     window_set_size(width,height)
 }
 
-if game_ended || game_paused{
+if ended || game_paused{
     if !instance_exists(obj_restart){
         instance_create(720, 800, obj_restart)
     }
@@ -85,10 +86,36 @@ if game_ended || game_paused{
     if instance_exists(obj_restart){
         instance_destroy(obj_restart)
     }
-    time += 1
+    time += delta_time/1000
     
-    if game_ended = true {
-        score = 0
+    while instance_number(obj_ball) &lt; ball_count {
+        instance_create(random(1088)+176, random(1088)+176, obj_ball)
+    }
+    if !instance_exists(obj_player) {
+        instance_create(mouse_x, mouse_y, obj_player)
+    } else if (mouse_x &gt; 176 &amp;&amp; mouse_x &lt; 1264 &amp;&amp; mouse_y &gt; 176 &amp;&amp; mouse_y &lt; 1264) {
+        obj_player.x = mouse_x
+        obj_player.y = mouse_y
+    }
+    
+    if global.game_ended = true {
+        if global.difficulty = 30 {
+            if time &gt;= global.hse{
+                global.hse = time
+            }
+        } else if global.difficulty = 20 {
+            if time &gt;= global.hsm{
+                global.hsm = time
+            }
+        } else if global.difficulty = 10 {
+            if time &gt;= global.hsh{
+                global.hsh = time
+            }
+        } else if global.difficulty = 5 {
+            if time &gt;= global.hsg{
+                global.hsg = time
+            }
+        }
         
         ini_open("userdata.ini")
         ini_write_real("save","highscore_easy",global.hse)
@@ -96,6 +123,7 @@ if game_ended || game_paused{
         ini_write_real("save","highscore_hard",global.hsh)
         ini_write_real("save","highscore_god",global.hsg)
         ini_close()
+        ended = true
     }
 }
 
@@ -230,15 +258,15 @@ draw_set_alpha(1)
 draw_set_font(fnt_header)
 draw_set_colour(c_white)
 draw_text(10,10,"Collider By Electric S01")
-draw_text(30,1320,"Rows:" + string(score))
+draw_text(30,1320,"Time:" + string(time/1000) + "s")
 if global.difficulty = 30 {
-    draw_text(750,1320 ,"High Score:" + string(global.hse))
+    draw_text(750,1320 ,"High Score:" + string(global.hse/1000) + "s")
 } else if global.difficulty = 20 {
-    draw_text(750,1320 ,"High Score:" + string(global.hsm))
+    draw_text(750,1320 ,"High Score:" + string(global.hsm/1000) + "s")
 }else if global.difficulty = 10 {
-    draw_text(750,1320 ,"High Score:" + string(global.hsh))
+    draw_text(750,1320 ,"High Score:" + string(global.hsh/1000) + "s")
 }else if global.difficulty = 5 {
-    draw_text(750,1320 ,"High Score:" + string(global.hsg))
+    draw_text(750,1320 ,"High Score:" + string(global.hsg/1000) + "s")
 }
 
 
@@ -255,7 +283,7 @@ va = 80
 if debug{
     draw_set_colour(c_white)
     draw_text(0, 13*va, "View port = " + string(browser_width) + string(browser_height))
-    draw_text(0, 14*va, "Next block = " + string(next_block))
+    draw_text(0, 14*va, "Ball count = " + string(ball_count))
     draw_text(0, 15*va, "FPS = " + string(fps))
     draw_text(0, 16*va, "Real FPS = " + string(fps_real))
     draw_text(0, 17*va, "room_speed = " + string(room_speed))
@@ -305,7 +333,7 @@ if debug{
         <arguments>
           <argument>
             <kind>1</kind>
-            <string>instance_destroy(obj_block)
+            <string>instance_destroy(obj_ball)
 </string>
           </argument>
         </arguments>

@@ -10,6 +10,7 @@
     <sprite>sprites\spr_x</sprite>
     <sprite>sprites\spr_restart</sprite>
     <sprite>sprites\spr_ball</sprite>
+    <sprite>sprites\spr_collision</sprite>
   </sprites>
   <backgrounds name="background"/>
   <paths name="paths"/>
@@ -21,9 +22,10 @@
     <object>objects\obj_control</object>
     <object>objects\obj_restart</object>
     <object>objects\obj_player</object>
-    <object>objects\obj_brick</object>
+    <object>objects\obj_ball</object>
     <object>objects\obj_settings</object>
     <object>objects\obj_coverui</object>
+    <object>objects\obj_collision</object>
   </objects>
   <rooms name="rooms">
     <room>rooms\rm_game</room>
