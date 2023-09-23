@@ -28,6 +28,7 @@
             <string>width = 0
 height = 0
 time = 0
+time2 = 0
 global.settings = false
 rand = 0
 debug = false
@@ -61,8 +62,7 @@ debug = false
         <arguments>
           <argument>
             <kind>1</kind>
-            <string>show_debug_message("hi")
-if (os_browser != browser_not_a_browser) {
+            <string>if (os_browser != browser_not_a_browser) {
     if (browser_width &gt;= 600) &amp;&amp; (browser_height &gt;= 600) {
         width = 600
         height = 600
@@ -87,15 +87,25 @@ if ended || game_paused{
         instance_destroy(obj_restart)
     }
     time += delta_time/1000
+    time2 += delta_time/1000
     
     while instance_number(obj_ball) &lt; ball_count {
-        instance_create(random(1088)+176, random(1088)+176, obj_ball)
+        var xx = random(1088) + 176
+        var yy = random(1088) + 176
+        if !collision_circle(xx, yy, 32, obj_ball, 1, 1) &amp;&amp; !collision_circle(xx, yy, 32, obj_player, 1, 1) {
+            instance_create(xx, yy, obj_ball)
+        }
     }
     if !instance_exists(obj_player) {
         instance_create(mouse_x, mouse_y, obj_player)
-    } else if (mouse_x &gt; 176 &amp;&amp; mouse_x &lt; 1264 &amp;&amp; mouse_y &gt; 176 &amp;&amp; mouse_y &lt; 1264) {
-        obj_player.x = mouse_x
-        obj_player.y = mouse_y
+    } else {
+        obj_player.x = clamp(mouse_x, 176, 1264)
+        obj_player.y = clamp(mouse_y, 176, 1264)
+    }
+    
+    if time2 &gt; global.difficulty * 1000 {
+        time2 -= global.difficulty * 1000
+        ball_count++
     }
     
     if global.game_ended = true {
@@ -260,13 +270,13 @@ draw_set_colour(c_white)
 draw_text(10,10,"Collider By Electric S01")
 draw_text(30,1320,"Time:" + string(time/1000) + "s")
 if global.difficulty = 30 {
-    draw_text(750,1320 ,"High Score:" + string(global.hse/1000) + "s")
+    draw_text(700,1320 ,"High Score:" + string(global.hse/1000) + "s")
 } else if global.difficulty = 20 {
-    draw_text(750,1320 ,"High Score:" + string(global.hsm/1000) + "s")
+    draw_text(700,1320 ,"High Score:" + string(global.hsm/1000) + "s")
 }else if global.difficulty = 10 {
-    draw_text(750,1320 ,"High Score:" + string(global.hsh/1000) + "s")
+    draw_text(700,1320 ,"High Score:" + string(global.hsh/1000) + "s")
 }else if global.difficulty = 5 {
-    draw_text(750,1320 ,"High Score:" + string(global.hsg/1000) + "s")
+    draw_text(700,1320 ,"High Score:" + string(global.hsg/1000) + "s")
 }
 
 
@@ -288,6 +298,75 @@ if debug{
     draw_text(0, 16*va, "Real FPS = " + string(fps_real))
     draw_text(0, 17*va, "room_speed = " + string(room_speed))
 }
+</string>
+          </argument>
+        </arguments>
+      </action>
+    </event>
+    <event eventtype="9" enumb="116">
+      <action>
+        <libid>1</libid>
+        <id>603</id>
+        <kind>7</kind>
+        <userelative>0</userelative>
+        <isquestion>0</isquestion>
+        <useapplyto>-1</useapplyto>
+        <exetype>2</exetype>
+        <functionname></functionname>
+        <codestring></codestring>
+        <whoName>self</whoName>
+        <relative>0</relative>
+        <isnot>0</isnot>
+        <arguments>
+          <argument>
+            <kind>1</kind>
+            <string>room_speed += 10
+</string>
+          </argument>
+        </arguments>
+      </action>
+    </event>
+    <event eventtype="9" enumb="115">
+      <action>
+        <libid>1</libid>
+        <id>603</id>
+        <kind>7</kind>
+        <userelative>0</userelative>
+        <isquestion>0</isquestion>
+        <useapplyto>-1</useapplyto>
+        <exetype>2</exetype>
+        <functionname></functionname>
+        <codestring></codestring>
+        <whoName>self</whoName>
+        <relative>0</relative>
+        <isnot>0</isnot>
+        <arguments>
+          <argument>
+            <kind>1</kind>
+            <string>room_speed -= 10
+</string>
+          </argument>
+        </arguments>
+      </action>
+    </event>
+    <event eventtype="9" enumb="114">
+      <action>
+        <libid>1</libid>
+        <id>603</id>
+        <kind>7</kind>
+        <userelative>0</userelative>
+        <isquestion>0</isquestion>
+        <useapplyto>-1</useapplyto>
+        <exetype>2</exetype>
+        <functionname></functionname>
+        <codestring></codestring>
+        <whoName>self</whoName>
+        <relative>0</relative>
+        <isnot>0</isnot>
+        <arguments>
+          <argument>
+            <kind>1</kind>
+            <string>ball_count +=1
 </string>
           </argument>
         </arguments>

@@ -61,7 +61,7 @@ if global.game_ended {
 } else if collision_circle(x,y,32,obj_ball,1,1) || collision_circle(x,y,32,obj_collision,1,1) {
     move_bounce_solid(true)
 }
-speed = 8
+speed = 48*delta_time/100000
 </string>
           </argument>
         </arguments>
