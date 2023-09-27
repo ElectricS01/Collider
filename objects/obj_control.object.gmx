@@ -40,6 +40,8 @@ game_paused = false
 ball_count = 4
 
 debug = false
+countTest = 0
+frametimeTest[0] = 0
 </string>
           </argument>
         </arguments>
@@ -62,10 +64,13 @@ debug = false
         <arguments>
           <argument>
             <kind>1</kind>
-            <string>if (os_browser != browser_not_a_browser) {
-    if (browser_width &gt;= 600) &amp;&amp; (browser_height &gt;= 600) {
-        width = 600
-        height = 600
+            <string>frametimeTest[countTest] = delta_time/1000
+countTest++
+
+if (os_browser != browser_not_a_browser) {
+    if (browser_width &gt;= 1440) &amp;&amp; (browser_height &gt;= 1440) {
+        width = 1440
+        height = 1440
     } else {
         if (browser_width &lt;= browser_height){
             width = browser_width 
@@ -291,13 +296,24 @@ draw_sprite(spr_settings, 0, 1400, 40)
 
 va = 80
 if debug{
+    draw_set_alpha(0.5)
     draw_set_colour(c_white)
     draw_text(0, 13*va, "View port = " + string(browser_width) + string(browser_height))
     draw_text(0, 14*va, "Ball count = " + string(ball_count))
     draw_text(0, 15*va, "FPS = " + string(fps))
     draw_text(0, 16*va, "Real FPS = " + string(fps_real))
     draw_text(0, 17*va, "room_speed = " + string(room_speed))
+    for (i = 0; i &lt; 400; i++) {
+        if countTest &gt; i {
+            if countTest &gt; 400 {
+                draw_rectangle((i+1)*2, 1000-frametimeTest[(countTest-400+i)], ((i+1)*2)+1, 1000, 0)
+            } else {
+                draw_rectangle((i+1)*2, 1000-frametimeTest[i], ((i+1)*2)+1, 1000, 0)
+            }
+        }
+    }
 }
+draw_set_alpha(1)
 </string>
           </argument>
         </arguments>
